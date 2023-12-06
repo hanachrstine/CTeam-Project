@@ -1,16 +1,27 @@
 $(document).ready(function () {
-    // Sample data for demonstration
-    var dataKeuangan = []; // Memulai dengan data kosong
 
-    var itemsPerPage = 3; // Sesuaikan jumlah item per halaman
+    var dataKeuangan = [];
+
+    var itemsPerPage = 3;
     var currentPage = 1;
 
-    // Function to update the financial dashboard
+    function saveDataToLocalStorage() {
+        console.log(dataKeuangan);
+        localStorage.setItem("dataKeuangan", JSON.stringify(dataKeuangan));
+    }
+
+    function loadDataFromLocalStorage() {
+        var storedData = localStorage.getItem("dataKeuangan");
+        if (storedData) {
+            dataKeuangan = [];
+            dataKeuangan = JSON.parse(storedData);
+        }
+    }
+
     function updateDashboard() {
         var totalPengeluaran = 0;
         var totalPemasukan = 0;
 
-        // Calculate total pengeluaran and pemasukan
         for (var i = 0; i < dataKeuangan.length; i++) {
             if (dataKeuangan[i].kategori === "Pengeluaran") {
                 totalPengeluaran += parseFloat(dataKeuangan[i].jumlah);
@@ -19,24 +30,23 @@ $(document).ready(function () {
             }
         }
 
-        // Update the HTML elements with the calculated values
         $("#total-pengeluaran").text("" + formatCurrency(totalPengeluaran));
         $("#total-pemasukan").text("" + formatCurrency(totalPemasukan));
         $("#saldo").text("" + formatCurrency(totalPemasukan - totalPengeluaran));
 
-        // Menampilkan atau menyembunyikan tabel berdasarkan keberadaan data
         var noDataMessage = "<tr><td colspan='5' class='no-data'>Tidak ada data</td></tr>";
         if (dataKeuangan.length === 0) {
-            // Menggunakan efek fade-in untuk menampilkan pesan "Tidak ada data"
-            $("#data-keuangan").html(noDataMessage).fadeIn(1000);
-            $("#pagination").empty(); // Sembunyikan paginasi jika tidak ada data
+            
+            // $("#data-keuangan").html(noDataMessage).fadeIn(500);
+            $("#pagination").empty();
         } else {
-            $("#data-keuangan").html(noDataMessage); // Menampilkan pesan "Tidak ada data" tanpa fade-in jika ada data
+            $("#data-keuangan").html(noDataMessage);
             renderData();
         }
+
+        saveDataToLocalStorage();
     }
 
-    // Function to format currency with commas
     function formatCurrency(value) {
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -44,13 +54,12 @@ $(document).ready(function () {
         }).format(value);
     }
 
-    // Function to render data in the table with pagination
     function renderData() {
         var startIndex = (currentPage - 1) * itemsPerPage;
         var endIndex = startIndex + itemsPerPage;
         var paginatedData = dataKeuangan.slice(startIndex, endIndex);
 
-        $("#data-keuangan").empty(); // Hapus data yang ada
+        $("#data-keuangan").empty();
 
         for (var i = 0; i < paginatedData.length; i++) {
             var row = "<tr>";
@@ -66,9 +75,10 @@ $(document).ready(function () {
                 "'>Delete</button></td>";
             row += "</tr>";
             $("#data-keuangan").append(row);
+
+            saveDataToLocalStorage();
         }
 
-        // Attach event handlers for edit and delete buttons
         $(".btn-edit").click(function () {
             var index = $(this).data("index");
             showEditModal(index);
@@ -79,39 +89,36 @@ $(document).ready(function () {
             deleteData(index);
         });
 
-        // Render pagination below the table
         renderPagination();
     }
 
-    // Function to show the edit modal with data
     function showEditModal(index) {
         $("#edit-nama").val(dataKeuangan[index].nama);
         $("#edit-jumlah").val(dataKeuangan[index].jumlah);
         $("#edit-kategori").val(dataKeuangan[index].kategori);
         $("#editModal").modal("show");
 
-        // Event handler for update button in edit modal
         $("#btn-update")
             .off("click")
             .on("click", function () {
                 updateData(index);
             });
+
     }
 
-    // Function to add new data
     function addData(nama, jumlah, kategori) {
         dataKeuangan.push({ nama: nama, jumlah: jumlah, kategori: kategori });
         updateDashboard();
         renderData();
         $("#addModal").modal("hide");
 
-        // Reset form values
         $("#nama").val("");
         $("#jumlah").val("");
         $("#kategori").val("");
+
+        saveDataToLocalStorage();
     }
 
-    // Function to update existing data
     function updateData(index) {
         dataKeuangan[index].nama = $("#edit-nama").val();
         dataKeuangan[index].jumlah = $("#edit-jumlah").val();
@@ -119,16 +126,21 @@ $(document).ready(function () {
         updateDashboard();
         renderData();
         $("#editModal").modal("hide");
+        
+        saveDataToLocalStorage();
     }
 
-    // Function to delete data
     function deleteData(index) {
         dataKeuangan.splice(index, 1);
         updateDashboard();
         renderData();
+        
+        saveDataToLocalStorage();
     }
+    
+    loadDataFromLocalStorage();
+    updateDashboard();
 
-    // Render pagination below the table
     function renderPagination() {
         var totalPages = Math.ceil(dataKeuangan.length / itemsPerPage);
         var pagination = $("#pagination").empty();
@@ -148,7 +160,7 @@ $(document).ready(function () {
         }
     }
 
-    // Event handler for add button in add modal
+
     $("#btn-add").click(function () {
         var nama = $("#nama").val();
         var jumlah = $("#jumlah").val();
@@ -156,6 +168,5 @@ $(document).ready(function () {
         addData(nama, jumlah, kategori);
     });
 
-    // Initialize the dashboard and table on page load
     updateDashboard();
 });

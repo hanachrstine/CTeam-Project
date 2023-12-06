@@ -1,7 +1,8 @@
 /* CSS for styling */
 body {
-  font-family: "Arial", sans-serif;
-  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .container {
@@ -9,7 +10,7 @@ body {
 }
 
 h2 {
-  color: #007bff;
+  color: #000;
 }
 
 .row {
@@ -33,7 +34,7 @@ h2 {
 
 /* Styling table header */
 .table thead {
-  background-color: #007bff;
+  background-color: #f8f9fa;
   color: #fff;
 }
 
@@ -43,7 +44,8 @@ h2 {
 }
 
 /* Styling table cells (th, td) */
-.table th, .table td {
+.table th,
+.table td {
   border: 1px solid #dee2e6; /* Menambahkan border pada th dan td */
   padding: 8px;
   text-align: center;
@@ -54,12 +56,11 @@ h2 {
   background-color: #f8f9fa;
 }
 
-
 .no-data {
   text-align: center;
   vertical-align: middle;
   height: 100px; /* Sesuaikan dengan tinggi sel tabel Anda */
-  line-height: 100px; /* Sesuaikan dengan tinggi sel tabel Anda */
+  line-height: 100px;
 }
 
 #pagination {
@@ -114,21 +115,25 @@ h2 {
 /* ... (existing CSS) ... */
 
 /* Navbar Styling */
-.navbar {
-  background-color: #3498db;
-}
-
-.navbar-brand {
-  color: #fff;
-  font-weight: bold;
-}
-
-/* Footer Styling */
+.navbar,
 .footer {
-  background-color: #f8f9fa;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  background-color: #42f5d1; /* Hijau Tosca */
+  color: white; /* Teks putih */
+}
+
+/* Teks Navbar di sudut kanan dan kiri */
+.navbar-brand {
+  margin-right: auto;
+  margin-left: 15px;
+}
+
+/* Teks Navbar-nav di sebelah kanan */
+.navbar-nav {
+  margin-left: auto;
+}
+
+.footer {
+  text-align: center;
 }
 
 /* Responsive Styles */
