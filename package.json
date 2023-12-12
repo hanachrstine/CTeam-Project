@@ -10,15 +10,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
   "dependencies": {
     "@hapi/hapi": "^21.3.2",
-    "@hapi/inert": "^7.1.0",
-    "@hapi/vision": "^7.0.3",
-    "bootstrap": "^5.3.2",
-    "handlebars": "^4.7.8",
     "hapi": "^18.1.0",
-    "html": "^1.0.0",
-    "jquery": "^3.7.1",
-    "popper.js": "^1.16.1"
+    "hapi-cors": "^1.0.3",
+    "mysql2": "^3.6.5"
   }
 }
